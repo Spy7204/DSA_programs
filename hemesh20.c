@@ -1,76 +1,152 @@
-#include <stdio.h>
-#include <stdlib.h>
 
-struct node {
-    int info;
-    int pr;
-    struct node *next;
+#include<stdio.h>
+#include<stdlib.h>
+
+int cntr=0;
+
+struct node{
+    int data;
+    int priority;
+    struct node* next;
 };
+struct node* front=NULL;
 
-struct node *list = NULL;// start of linked list
+struct node* createNode();
+void state();
+void insert();
+void delete();
+void display();
+void count();
 
-// Function to allocate memory to a new node
-struct node* getnode(void) {
-    return (struct node*)malloc(sizeof(struct node));
-}
+void main()
+{
+    int choice,loopexit;
+    LABEL:
+    while(1)
+    {
+        printf("\n1. Check the state of Priority Queue");
+        printf("\n2. Insert element into the Priority Queue");
+        printf("\n3. Delete element form the Priority Queue");
+        printf("\n4. Display elements of the Priority Queue");
+        printf("\n5. Count the elements of the Priority Queue");
+        printf("\nSelect option: ");
+        scanf("%d",&choice);
 
-// Function to free memory of node
-void freenode(struct node *p) {
-    free(p);
-}
-
-// Enqueue an element with its priority
-void enqueue(int x, int pr) {
-    struct node *temp, *nn;
-    nn = getnode();
-    nn->info = x;
-    nn->pr = pr;
-    nn->next = NULL;
-
-    if (list == NULL || pr < list->pr) {
-        nn->next = list;
-        list = nn;
-    } else {
-        temp = list;
-        while (temp->next != NULL && nn->pr > temp->pr) {
-            temp = temp->next;
+        switch(choice)
+        {
+            case 1:
+                state();
+                break;
+            
+            case 2:
+                insert();
+                break;
+            
+            case 3:
+                delete();
+                break;
+            
+            case 4:
+                display();
+                break;
+            
+            case 5:
+                count();
+                break;
+                    
+            default:
+                break;
         }
-        nn->next = temp->next;
-        temp->next = nn;
+        printf("\nDo you want to exit(1/0): ");
+        scanf("%d",&loopexit);
+        
+        if(loopexit==0)
+            goto LABEL;
+        else 
+            break;
     }
 }
 
-// Dequeue the element with the highest priority
-int dequeue() {
-    if (list == NULL) {
-        printf("Queue is empty\n");
-        return -1; // indicating an empty queue
-    }
-
-    struct node *temp = list;
-    int data = temp->info;
-    list = list->next;
-    freenode(temp);
-    return data;
+struct node* createNode()
+{
+    return (struct node*) malloc(sizeof(struct node));
 }
 
-int main() {
-    int num_elements;
-    printf("Enter the number of elements: ");
-    scanf("%d", &num_elements);
+void state()
+{
+    if(front==NULL)
+        printf("\nPriority Queue is empty!");
+    else  
+        printf("\nPriority Queue is not empty");
+}
 
-    for (int i = 0; i < num_elements; i++) {
-        int data, priority;
-        printf("Enter element %d and its priority: ", i + 1);
-        scanf("%d %d", &data, &priority);
-        enqueue(data, priority);
+void insert()
+{
+    int x,y;
+    struct node* newnode;
+    newnode=createNode();
+
+    if(newnode==NULL)
+        printf("\nPriorityQueueOverflow!");
+    else
+    {
+        printf("\nEnter element to be inserted: ");
+        scanf("%d",&x);
+        printf("\nEnter priority for this element: ");
+        scanf("%d",&y);
+        newnode->data=x;
+        newnode->priority=y;
+
+        if(front==NULL||newnode->priority<=front->priority)
+        {
+            newnode->next=front;
+            front=newnode;
+            cntr++;
+        }
+        else
+        {
+            struct node* temp=front;
+            while(temp->next!=NULL&&temp->next->priority<=newnode->priority)
+                temp=temp->next;
+            newnode->next=temp->next;
+            temp->next=newnode;
+        }
     }
+}
 
-    printf("\nDequeueing elements in priority order:\n");
-    while (list != NULL) {
-        int data = dequeue();
-        printf("Dequeued: %d\n", data);
+void delete()
+{
+    if(front==NULL)
+        printf("\nPriority Queue is empty!");
+    else
+    {
+        printf("\nDeleted element: %d",front->data);
+        printf("\nPriority: %d",front->priority);
+        front=front->next;
+        cntr--;
     }
+}
 
-    return 0;
+void display()
+{
+    if(front==NULL)
+        printf("\nPriority Queue is empty!");
+    else
+    {
+        struct node* temp=front;
+        printf("\nElements of Priority Queue are: ");
+        while(temp!=NULL)
+        {
+            printf("\nelement:%d priority:%d",temp->data,temp->priority);
+            temp=temp->next;
+        }
+    }
+}
+
+void count()
+{
+    if(front==NULL)
+        printf("\nPriority Queue is empty!");
+    else
+        printf("Number of elements in Priority Queue: %d",cntr);
 }
