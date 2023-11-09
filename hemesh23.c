@@ -1,37 +1,21 @@
-//QuickSort
+//insertion Sort
 #include <stdio.h>
-int partition(int arr[],int low,int high){
-    int pivot=arr[low];
-    int i=low+1;
-    int j=high;
-    int temp;
-    do{
-        while(arr[i]<=pivot){
-            i++;
-        }
-        while(arr[j]>pivot){
+void InsertionSort(int arr[],int n)
+{
+    int j,key;
+
+    for(int i=1;i<=n-1;i++){
+        key=arr[i];
+        j=i-1;
+        while (j>=0 && arr[j]>key){
+            arr[j+1]=arr[j];
             j--;
         }
-        if(i<j){
-            temp= arr[i];
-            arr[i]=arr[j];
-            arr[j]=temp;
-        }
-    } while (i<j);
-        temp=arr[low];
-        arr[low]=arr[j];
-        arr[j]=temp;
-        return j;
-
-}
-void QuickSort(int arr[],int low,int high)
-{       int partitionIndex;
-        if(low<high) {
-            partitionIndex=partition(arr, low, high);
-            QuickSort(arr, low, partitionIndex - 1);
-            QuickSort(arr, partitionIndex + 1, high);
+        arr[j+1]=key;
     }
-
+    for (int k = 0; k <n ; ++k) {
+        printf("%d\n",arr[k]);
+    }
 }
 int main() {
     int n;
@@ -43,10 +27,6 @@ int main() {
         scanf("%d",&arr[k]);
     }
     printf("Sorted Array:-\n");
-    QuickSort(arr,0,n-1);
-    for (int k = 0; k<n ; ++k) {
-        printf("%d\n",arr[k]);
-    }
+    InsertionSort(arr,n);
     return 0;
 }
-
