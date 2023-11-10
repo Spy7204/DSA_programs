@@ -3,38 +3,61 @@
   Roll No=11
 */
 
+#include <stdio.h>
 
-#include<stdio.h>
+// Define the time_struct structure
+struct time_struct {
+    int hour;
+    int minute;
+    int second;
+};
 
-/*function that checkes that two array are identical*/
-int check(int arr1[], int arr2[], int n)
-{
-    int flag=1;
-    for(int i=0; i<n; i++)
-    {
-        if(arr1[i]!=arr2[i])
-        {
-            flag=0;
+// Function to input new time
+void inputTime(struct time_struct *t) {
+    printf("Enter hour, minute, and second (space-separated): ");
+    scanf("%d %d %d", &t->hour, &t->minute, &t->second);
+}
+
+// Function to display the time
+void displayTime(struct time_struct t) {
+    printf("Time: %02d:%02d:%02d\n", t.hour, t.minute, t.second);
+}
+
+// Function to update the time by one second
+void updateTime(struct time_struct *t) {
+    t->second++;
+    
+    if (t->second == 60) {
+        t->second = 0;
+        t->minute++;
+
+        if (t->minute == 60) {
+            t->minute = 0;
+            t->hour++;
+
+            if (t->hour == 24) {
+                t->hour = 0;
+            }
         }
     }
-    return flag;
 }
-void main()
-{  
-    int n;
-    printf("enter the numbers of elements you want in a array: ");
-    scanf("%d", &n);
-    int arr1[n], arr2[n];
-    printf("enter 1st array values: ");
-    for(int i=0; i<n; i++)
-    {
-        scanf("%d", &arr1[i]);
-    }
-    printf("enter 2nd array values: ");
-    for(int i=0; i<n; i++)
-    {
-        scanf("%d", &arr2[i]);
-    }
 
-    printf("the array are identical: %d", check(arr1, arr2, n));
+int main() {
+    struct time_struct myTime;
+
+    // Input new time
+    inputTime(&myTime);
+
+    // Display the original time
+    printf("Original ");
+    displayTime(myTime);
+
+    // Update the time by one second
+    updateTime(&myTime);
+
+    // Display the updated time
+    printf("Updated ");
+    displayTime(myTime);
+
+    return 0;
 }
